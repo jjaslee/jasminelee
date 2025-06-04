@@ -1,0 +1,92 @@
+.initial-flip {
+  font-size: 4rem;
+  text-align: center;
+  margin-top: 100px;
+  cursor: pointer;
+  transition: transform 0.4s ease;
+}
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Playfair Display', serif;
+  background-color: #f9f9f9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.initial-wrapper {
+  display: inline-block;
+  padding: 0 20px;
+}
+
+.initial-flip {
+  font-size: 4rem;
+  font-weight: bold;
+  cursor: pointer;
+  display: inline-block;
+  transition: transform 0.08s ease-in-out; /* smoother = lower */
+  white-space: nowrap;
+}
+
+
+@keyframes bounceFlipX {
+  0%   { transform: translateX(0); }
+  20%  { transform: translateX(10px); }
+  40%  { transform: translateX(-10px); }
+  60%  { transform: translateX(5px); }
+  80%  { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
+}
+
+/* LIGHT AND DARK MODE TOGGLE */
+/* Container is the width of 1.5 circles */
+.theme-toggle {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  width: 48px; /* 1.5 * 32px circle */
+  height: 32px;
+  cursor: pointer;
+  z-index: 1000;
+  background: transparent;
+}
+
+/* Circle base */
+.circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-sizing: border-box; /* 👈 Add this line */
+}
+
+
+/* Light circle on top initially */
+.white-circle {
+  background: white;
+  border: 2px solid black;
+  z-index: 2;
+}
+
+/* Dark circle behind */
+.black-circle {
+  background: black;
+  z-index: 1;
+  transform: translateX(20px); /* half overlap */
+}
+
+/* When dark mode is active, flip their positions */
+body.dark .white-circle {
+  transform: translateX(20px); /* slide to right */
+  z-index: 1;
+}
+
+body.dark .black-circle {
+  transform: translateX(0); /* slide back to left */
+  z-index: 2;
+}
