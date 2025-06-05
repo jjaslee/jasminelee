@@ -1,3 +1,7 @@
+// ─────────────────────────────────────────────
+// JL ↔ LJ FLIP ANIMATION
+// ─────────────────────────────────────────────
+
 const flip = document.getElementById('flip-name');
 
 let decayTimeout;

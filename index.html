@@ -14,16 +14,30 @@
 
 <body>
 
-  <!-- Light/Dark mode toggle: global and always visible -->
-  <div class="theme-toggle" id="theme-toggle">
+<!-- toggle container -->
+<div class="toggle-container">
+  
+  <div id="language-toggle" class="language-toggle">
+    <span class="lang en active">EN</span>
+    <span class="separator">|</span>
+    <span class="lang zh">中文</span>
+  </div>
+
+  <div id="theme-toggle" class="theme-toggle">
     <div class="circle white-circle"></div>
     <div class="circle black-circle"></div>
   </div>
+</div>
 
-  <!-- JL ↔ LJ flip section -->
-  <div class="initial-wrapper">
-    <div class="initial-flip" id="flip-name">JL</div>
-  </div>
+  <!-- Jasmine Lee drop-in bridge animation -->
+  <div class="name-wrapper">
+  <h1 class="name-intro" id="name-intro">
+    <span>J</span><span>A</span><span>S</span><span>M</span><span>I</span><span>N</span><span>E</span>
+    <span class="name-gap"></span>
+    <span>L</span><span>E</span><span>E</span>
+  </h1>
+  <span id="chinese-name" class="chinese-name">李靜文</span>
+</div>
 
   <!-- JS files -->
   <script src="js/script.js"></script>
