@@ -15,10 +15,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const AUTO_SPEED = 0.02;
 
-  // ─── Replace single FRIC constant with two + a variable ───
+  // Replace single FRIC constant with two + a variable
   const NORMAL_FRICTION  = 0.995;  // normal deceleration
-  const INITIAL_FRICTION = 0.995;  // slower decay for initial roll
-  let friction = NORMAL_FRICTION;  // start off using normal
+  const INITIAL_FRICTION = 0.995;  // (unchanged here—so initial decay ≈ normal)
+  let friction = NORMAL_FRICTION;  // start using normal
 
   const MIN_SPEED      = 0.005;
   const VISIBLE_ANGLE  = 60;
@@ -88,8 +88,91 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   requestAnimationFrame(animate);
 
-  // ─────────────── DRAG & WHEEL HANDLERS (unchanged) ───────────────
-  /* … your existing drag/touch/wheel code here … */
+  // ─────────────── DRAG & WHEEL HANDLERS ───────────────
+
+  // Mouse drag (desktop)
+  container.addEventListener("mousedown", (e) => {
+    if (e.button !== 0) return; // only left click
+    isDragging = true;
+    dragStartX        = e.clientX;
+    dragStartRotation = currRotation;
+    prevRotFrame      = currRotation;
+    velocity          = AUTO_SPEED;
+    container.style.cursor = "grabbing";
+    e.preventDefault();
+  });
+
+  container.addEventListener("mousemove", (e) => {
+    if (!isDragging) return;
+    const dx = e.clientX - dragStartX;
+    const ROT_PER_PIXEL = 0.2; // low sensitivity → heavy feel
+    currRotation = dragStartRotation + dx * ROT_PER_PIXEL;
+    carousel.style.transform = `rotateY(${currRotation}deg)`;
+
+    // Measure instantaneous velocity = Δrotation per frame
+    velocity = currRotation - prevRotFrame;
+    prevRotFrame = currRotation;
+  });
+
+  container.addEventListener("mouseup", () => {
+    if (!isDragging) return;
+    isDragging = false;
+    container.style.cursor = "grab";
+    // velocity remains at last measured → friction will slow it
+  });
+
+  container.addEventListener("mouseleave", () => {
+    if (!isDragging) return;
+    isDragging = false;
+    container.style.cursor = "grab";
+  });
+
+  // Touch drag (mobile/trackpad)
+  container.addEventListener("touchstart", (e) => {
+    isDragging = true;
+    dragStartX        = e.touches[0].clientX;
+    dragStartRotation = currRotation;
+    prevRotFrame      = currRotation;
+    velocity          = AUTO_SPEED;
+  });
+
+  container.addEventListener("touchmove", (e) => {
+    if (!isDragging) return;
+    const dx = e.touches[0].clientX - dragStartX;
+    const ROT_PER_PIXEL = 0.2;
+    currRotation = dragStartRotation + dx * ROT_PER_PIXEL;
+    carousel.style.transform = `rotateY(${currRotation}deg)`;
+
+    velocity = currRotation - prevRotFrame;
+    prevRotFrame = currRotation;
+  });
+
+  container.addEventListener("touchend", () => {
+    if (!isDragging) return;
+    isDragging = false;
+  });
+
+  // Wheel/Scroll (trackpad or mouse wheel)
+  container.addEventListener(
+    "wheel",
+    (e) => {
+      e.preventDefault(); // prevent page scroll while over carousel
+
+      // Combine horizontal (deltaX) or vertical (deltaY) scroll into one “delta”:
+      const delta = e.deltaX !== 0 ? e.deltaX : e.deltaY;
+      const ROT_PER_SCROLL_PX = 0.2; // same low sensitivity
+      currRotation += delta * ROT_PER_SCROLL_PX;
+
+      carousel.style.transform = `rotateY(${currRotation}deg)`;
+
+      // Immediately set velocity to that scroll speed:
+      velocity = delta * ROT_PER_SCROLL_PX;
+    },
+    { passive: false } // so that e.preventDefault() actually works
+  );
+
+  // Set “grab” cursor by default
+  container.style.cursor = "grab";
 
   // ─────────────── SEQUENCE: name → toggles → carousel ───────────────
 
@@ -98,11 +181,17 @@ document.addEventListener("DOMContentLoaded", () => {
     toggles.classList.add("visible");
   }, 1200);
 
-  // 2) Show carousel at ~1.7s, with an initial “roll” that decays gradually
-setTimeout(() => {
-  document.querySelector('.carousel-3d-container').classList.add('visible');
-  velocity = 2;
-  setTimeout(() => { friction = NORMAL_FRICTION; }, 800);
-}, 1500);  // fire 200 ms earlier so CSS roll and JS spin overlap nicely
+  // 2) Show carousel at ~1.7s, with a small initial spin, then gradually settle
+  setTimeout(() => {
+    document.querySelector('.carousel-3d-container').classList.add('visible');
 
+    // Initial gentle push
+    velocity = 1;
+
+    // After 800 ms, restore normal friction so it slows naturally
+    setTimeout(() => {
+      friction = NORMAL_FRICTION;
+      // (No hard snap to AUTO_SPEED; it will ease in naturally)
+    }, 800);
+  }, 1700);
 });

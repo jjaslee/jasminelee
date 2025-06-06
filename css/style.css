@@ -268,45 +268,40 @@ body.dark .black-circle {
 }
 
 /* ──────────────────────────────────────────────── */
-/*          3D CAROUSEL CONTAINER (SLIDE IN)       */
+/*            3D CAROUSEL STYLES (FADE IN)         */
 /* ──────────────────────────────────────────────── */
 
-/* 27) Carousel outer container: start off-screen left + hidden */
+/* 27) Carousel outer container: hidden by default */
 .carousel-3d-container {
   width: 100%;
   max-width: none;
   margin: 0 auto;
   padding: 40px 0;
-  perspective: 1000px;         /* same depth as before */
+  perspective: 1000px;  /* same depth as before */
   overflow: visible;
-
-  /* START 100vw LEFT, no rotation */
-  transform: translateX(-100vw);
 
   /* HIDDEN + NON‐INTERACTIVE */
   opacity: 0;
   pointer-events: none;
 
-  /* SLIDE IN horizontally over 0.6s + fade in */
-  transition: transform 0.6s ease-out,
-              opacity   0.6s ease-out;
+  /* FADE‐IN transition */
+  transition: opacity 0.6s ease;
 }
 
-/* 27a) When `.visible` is added, slide container into place + fade to opaque */
+/* 27a) When '.visible' is added, fade to fully opaque */
 .carousel-3d-container.visible {
-  transform: translateX(0);   /* slide to its natural position */
-  opacity: 1;                 /* fully visible */
-  pointer-events: auto;       /* re-enable interaction */
+  opacity: 1;
+  pointer-events: auto;
 }
 
 /* 28) 3D “stage” that rotates cards (unchanged) */
 .carousel-3d {
   position: relative;
   width: 100%;
-  height: 300px;
+  height: 300px;            /* adjust as needed */
   transform-style: preserve-3d;
   transform: rotateY(0deg);
-  transition: transform 0.1s ease-out; /* smooth internal spin */
+  transition: transform 0.1s ease-out; /* smooth inner spin */
 }
 
 /* 29) Individual carousel cards (unchanged) */
@@ -316,9 +311,9 @@ body.dark .black-circle {
   left: 50%;
   width: 300px;
   height: 200px;
-  margin: -100px 0 0 -150px;
+  margin: -100px 0 0 -150px; /* center by half dimensions */
   border-radius: 4px;
-  overflow: visible;
+  overflow: visible;         /* allow caption below */
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
   background: #fff;
   backface-visibility: visible;
@@ -326,6 +321,7 @@ body.dark .black-circle {
               filter 0.1s ease-out;
 }
 
+/* 30) Images fill each card (unchanged) */
 .carousel-cell img {
   width: 100%;
   height: 100%;
@@ -336,10 +332,12 @@ body.dark .black-circle {
   border-radius: 4px;
 }
 
+/* 31) Dim cards farther back (unchanged) */
 .carousel-cell.dimmed img {
   filter: brightness(0.65);
 }
 
+/* 32) Caption below each card, hidden until hover (unchanged) */
 .carousel-cell .caption {
   position: absolute;
   bottom: -18px;
@@ -357,6 +355,7 @@ body.dark .black-circle {
   z-index: 2;
 }
 
+/* 33) Show caption on hover (unchanged) */
 .carousel-cell.hovered .caption {
   opacity: 1;
   transform: translateY(0);
