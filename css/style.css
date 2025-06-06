@@ -1,12 +1,8 @@
-/* ─────────────── INITIAL FLIP ANIMATION ─────────────── */
+/* ──────────────────────────────── */
+/*          BASE STYLES            */
+/* ──────────────────────────────── */
 
-.initial-flip {
-  font-size: 4rem;
-  text-align: center;
-  margin-top: 100px;
-  cursor: pointer;
-  transition: transform 0.4s ease;
-}
+/* 1) Reset and global */
 body {
   margin: 0;
   padding: 0;
@@ -18,21 +14,29 @@ body {
   height: 100vh;
 }
 
+/* ──────────────────────────────── */
+/*     INITIAL FLIP ANIMATION      */
+/* ──────────────────────────────── */
+
+/* 2) Wrapper for initial flip text */
 .initial-wrapper {
   display: inline-block;
   padding: 0 20px;
 }
 
+/* 3) Flip element styling */
 .initial-flip {
   font-size: 4rem;
   font-weight: bold;
+  text-align: center;
+  margin-top: 100px;
   cursor: pointer;
   display: inline-block;
-  transition: transform 0.08s ease-in-out; /* smoother = lower */
   white-space: nowrap;
+  transition: transform 0.08s ease-in-out; /* smoother = lower value */
 }
 
-
+/* 4) Bounce keyframes for flip effect */
 @keyframes bounceFlipX {
   0%   { transform: translateX(0); }
   20%  { transform: translateX(10px); }
@@ -42,11 +46,87 @@ body {
   100% { transform: translateX(0); }
 }
 
-/* ──────────────────────────────────────────────── */
-/* ─────────────── TOGGLE CONTAINER ─────────────── */
-/* ──────────────────────────────────────────────── */
+/* ──────────────────────────────── */
+/*         NAME INTRO ANIM         */
+/* ──────────────────────────────── */
+
+/* 5) Container for “JASMINE LEE” drop-in */
+.name-wrapper {
+  position: fixed;
+  top: -50px;      /* negative value pulls it further up */
+  left: 0rem;
+  display: flex;
+  align-items: flex-end;
+  z-index: 900;
+}
+
+/* 6) “JASMINE LEE” main styling */
+.name-intro {
+  display: inline-block;
+  font-family: "DM Serif Display", serif;  /* ← add this line */
+  font-size: 6rem;
+  font-weight: 400;                     
+  padding: 0.2em 0.6em;
+  white-space: nowrap;
+}
 
 
+/* 7) Each letter’s fall animation */
+.name-intro span {
+  display: inline-block;
+  margin-right: 0.2rem;     /* controls letter spacing */
+  transform: translateY(-120px);
+  opacity: 0;
+  animation: letterFall 0.6s ease-out forwards;
+}
+
+/* 8) Delays for each letter (including space) */
+.name-intro span:nth-child(1)  { animation-delay: 0.05s; }
+.name-intro span:nth-child(2)  { animation-delay: 0.10s; }
+.name-intro span:nth-child(3)  { animation-delay: 0.15s; }
+.name-intro span:nth-child(4)  { animation-delay: 0.20s; }
+.name-intro span:nth-child(5)  { animation-delay: 0.25s; }
+.name-intro span:nth-child(6)  { animation-delay: 0.30s; }
+.name-intro span:nth-child(7)  { animation-delay: 0.35s; }
+.name-intro span:nth-child(8)  { animation-delay: 0.40s; }
+.name-intro span:nth-child(9)  { animation-delay: 0.45s; }
+.name-intro span:nth-child(10) { animation-delay: 0.50s; }
+.name-intro span:nth-child(11) { animation-delay: 0.55s; }
+
+/* 9) Keyframes for letter drop-in */
+@keyframes letterFall {
+  0%   { transform: translateY(-120px); opacity: 0; }
+  70%  { transform: translateY(10px); opacity: 1; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+/* 10) Optional gap between first and last name */
+.name-gap {
+  width: 0.1rem;
+}
+
+/* 11) Chinese name styling (initially hidden) */
+.chinese-name {
+  font-size: 1.5rem;
+  font-weight: 400;
+  margin-left: -1rem;       /* space between “LEE” and “李靜文” */
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  align-self: flex-end;       /* baseline alignment in flex */
+  position: relative;
+  top: -6.8rem;               /* more negative is higher */
+}
+
+/* 12) Show Chinese name when needed */
+.chinese-name.show {
+  opacity: 1;
+}
+
+/* ──────────────────────────────── */
+/*        TOGGLE CONTAINERS        */
+/* ──────────────────────────────── */
+
+/* 13) Toggle container (e.g., theme, language toggles) */
 .toggle-container {
   position: fixed;
   top: 1rem;
@@ -55,72 +135,81 @@ body {
   gap: 1.5rem;
   align-items: center;
   z-index: 1000;
-
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.6s ease;
+  
+  opacity: 0;
+  pointer-events: none;
+
 }
 
+/* 14) Show toggle container when visible */
 .toggle-container.visible {
   opacity: 1;
   pointer-events: auto;
 }
 
+/* ──────────────────────────────── */
+/*       THEME TOGGLE SWITCH       */
+/* ──────────────────────────────── */
 
-/* ─────────────── THEME TOGGLE (DARK / LIGHT) ─────────────── */
-
-/* Container is the width of 1.5 circles */
+/* 15) Outer switch container */
 .theme-toggle {
-  position: relative; /* contains the .circle elements */
-  width: 48px;
+  position: relative;
+  width: 48px;                /* ~1.5× circle diameter */
   height: 32px;
   cursor: pointer;
   background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
+   margin-top: 0.5rem; /* moves it down a little */
+
 }
 
-/* Circle base */
+/* 16) Base circle styling */
 .circle {
   width: 20px;
   height: 20px;
   border-radius: 50%;
   position: absolute;
-  top: 3;
+  top: 3px;
   left: 0;
   transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  box-sizing: border-box; /* Add this line */
+  box-sizing: border-box;
 }
 
-
-/* Light circle on top initially */
+/* 17) Light circle on top initially */
 .white-circle {
   background: white;
   border: 1.5px solid black;
   z-index: 2;
 }
 
-/* Dark circle behind */
+/* 18) Dark circle behind */
 .black-circle {
   background: black;
   z-index: 1;
-  transform: translateX(15px); /* half overlap */
+  transform: translateX(15px); /* half-overlap to the right */
 }
 
-/* When dark mode is active, flip their positions */
+/* 19) Flip positions when dark mode is active */
 body.dark .white-circle {
-  transform: translateX(15px); /* slide to right */
+  transform: translateX(15px);
   z-index: 1;
 }
 
 body.dark .black-circle {
-  transform: translateX(0); /* slide back to left */
+  transform: translateX(0);
   z-index: 2;
 }
 
-/* ─────────────── language toggle ─────────────── */
+/* ──────────────────────────────── */
+/*      LANGUAGE TOGGLE STYLES      */
+/* ──────────────────────────────── */
 
+/* 20) Language toggle container */
 .language-toggle {
   display: flex;
   align-items: center;
@@ -132,31 +221,35 @@ body.dark .black-circle {
   transition: gap 0.3s ease;
 }
 
+/* 21) Expand gap on hover */
 .language-toggle:hover {
   gap: 1rem;
 }
 
+/* 22) Individual language option styling */
 .lang {
   opacity: 0.5;
   color: black;
   transition: opacity 0.3s ease;
 }
 
+/* 23) Active language highlighting */
 .lang.active {
   opacity: 1;
 }
 
+/* 24) Separator element (e.g., “|” between languages) */
 .separator {
   display: inline-block;
   transform-origin: center;
   transition: transform 0.5s ease;
 }
 
+/* ──────────────────────────────── */
+/*       COLLECTION SCRAMBLE        */
+/* ──────────────────────────────── */
 
-
-
-/* ─────────────── collection scramble ─────────────── */
-
+/* 25) Scramble effect on collection titles */
 .scramble {
   display: inline-block;
   font-size: 2rem;
@@ -165,6 +258,7 @@ body.dark .black-circle {
   transition: color 0.3s ease;
 }
 
+/* 26) Collections container */
 .collections {
   display: flex;
   flex-direction: column;
@@ -173,87 +267,97 @@ body.dark .black-circle {
   margin-top: 60px;
 }
 
-/* ─────────────── 'JASMINE LEE' DROP-IN INTO TOP LEFT ─────────────── */
+/* ──────────────────────────────────────────────── */
+/*          3D CAROUSEL CONTAINER (SLIDE IN)       */
+/* ──────────────────────────────────────────────── */
 
-.name-intro {
-  display: inline-block;
-  font-size: 4.5rem;
-  font-weight: 600;
-  padding: 0.2em 0.6em;
-  white-space: nowrap;
-  /* border: 2px solid currentColor; */
+/* 27) Carousel outer container: start off-screen left + hidden */
+.carousel-3d-container {
+  width: 100%;
+  max-width: none;
+  margin: 0 auto;
+  padding: 40px 0;
+  perspective: 1000px;         /* same depth as before */
+  overflow: visible;
 
-}
+  /* START 100vw LEFT, no rotation */
+  transform: translateX(-100vw);
 
-
-
-.name-intro span {
-  display: inline-block;
-  margin-right: 0.2rem; /* controls letter gap */
-  transform: translateY(-120px);
+  /* HIDDEN + NON‐INTERACTIVE */
   opacity: 0;
-  animation: letterFall 0.6s ease-out forwards;
+  pointer-events: none;
+
+  /* SLIDE IN horizontally over 0.6s + fade in */
+  transition: transform 0.6s ease-out,
+              opacity   0.6s ease-out;
 }
 
-
-/* Optional visual spacing between first and last name */
-.name-gap {
-  width: 0.1rem;
+/* 27a) When `.visible` is added, slide container into place + fade to opaque */
+.carousel-3d-container.visible {
+  transform: translateX(0);   /* slide to its natural position */
+  opacity: 1;                 /* fully visible */
+  pointer-events: auto;       /* re-enable interaction */
 }
 
-/* Chinese name styling */
-.chinese-name {
-  font-size: 1.5rem;
-  font-weight: 400;
-  margin-left: -0.5rem; /* space between "LEE" and "李靜文" */
-  opacity: 0;
-  transition: opacity 0.3s ease-in-out;
-  align-self: flex-end; /* this ensures baseline alignment in the flex container */
+/* 28) 3D “stage” that rotates cards (unchanged) */
+.carousel-3d {
   position: relative;
-  top: -4.7rem; /* tiny nudge to perfectly align  */
+  width: 100%;
+  height: 300px;
+  transform-style: preserve-3d;
+  transform: rotateY(0deg);
+  transition: transform 0.1s ease-out; /* smooth internal spin */
 }
 
-
-
-/* Correct delays from left to right (spaces too!) */
-.name-intro span:nth-child(1) { animation-delay: 0.05s; }  /* J */
-.name-intro span:nth-child(2) { animation-delay: 0.10s; }  /* a */
-.name-intro span:nth-child(3) { animation-delay: 0.15s; }  /* s */
-.name-intro span:nth-child(4) { animation-delay: 0.20s; }  /* m */
-.name-intro span:nth-child(5) { animation-delay: 0.25s; }  /* i */
-.name-intro span:nth-child(6) { animation-delay: 0.30s; }  /* n */
-.name-intro span:nth-child(7) { animation-delay: 0.35s; }  /* e */
-.name-intro span:nth-child(8) { animation-delay: 0.40s; }  /* space */
-.name-intro span:nth-child(9) { animation-delay: 0.45s; }  /* L */
-.name-intro span:nth-child(10) { animation-delay: 0.50s; } /* e */
-.name-intro span:nth-child(11) { animation-delay: 0.55s; } /* e */
-
-@keyframes letterFall {
-  0% {
-    transform: translateY(-120px);
-    opacity: 0;
-  }
-  70% {
-    transform: translateY(10px);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(0);
-    opacity: 1;
-  }
+/* 29) Individual carousel cards (unchanged) */
+.carousel-cell {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 300px;
+  height: 200px;
+  margin: -100px 0 0 -150px;
+  border-radius: 4px;
+  overflow: visible;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  background: #fff;
+  backface-visibility: visible;
+  transition: transform 0.1s ease-out,
+              filter 0.1s ease-out;
 }
 
+.carousel-cell img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  user-select: none;
+  pointer-events: none;
+  border-radius: 4px;
+}
 
-.chinese-name.show {
+.carousel-cell.dimmed img {
+  filter: brightness(0.65);
+}
+
+.carousel-cell .caption {
+  position: absolute;
+  bottom: -18px;
+  left: -2px;
+  font-size: 8px;
+  color: #333;
+  padding: 2px 4px;
+  border-radius: 3px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(4px);
+  transition: opacity 0.1s ease-out,
+              transform 0.1s ease-out;
+  z-index: 2;
+}
+
+.carousel-cell.hovered .caption {
   opacity: 1;
+  transform: translateY(0);
 }
-
-.name-wrapper {
-  position: fixed;
-  top: 0;
-  left: 2rem;
-  display: flex;
-  align-items: flex-end;
-  z-index: 900;
-}
-
